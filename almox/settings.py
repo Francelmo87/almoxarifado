@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'almox.base',
     'almox.produto',
+    'almox.estoque',
 ]
 
 MIDDLEWARE = [
