@@ -7,7 +7,7 @@
 
     {% if object_list %}
 
-        <table class="table-straped">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Importado</th>
@@ -29,7 +29,7 @@
                         {% endif %}
                     </td>
                     <td>{{object.ncm}}</td>
-                    <td>{{object.produto}}</td>
+                    <td><a href="{{ object.get_absolute_url }}">{{object.produto}}</a></td>
                     <td>R$ <span class="pull-rigt">{{object.preco}}</span></td>
                     <td class="text-center">{{object.estoque}}</td>
                     <td class="text-center">{{object.estoque_minimo}}</td>
