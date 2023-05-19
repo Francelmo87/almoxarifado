@@ -8,3 +8,7 @@ body{
 .no{
     color: red;
 }
+
+label.requiredField{
+  color: red;
+}
