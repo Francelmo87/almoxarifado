@@ -26,6 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # apps foreign
+    'widget_tweaks',
+    # my apps
     'almox.base',
     'almox.produto',
     'almox.estoque',
