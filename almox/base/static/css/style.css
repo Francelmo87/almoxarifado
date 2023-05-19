@@ -9,6 +9,6 @@ body{
     color: red;
 }
 
-label.requiredField{
+span.asteriskField{
   color: red;
 }

@@ -3,9 +3,14 @@
 {% block content %}
 <span class="pull-right">
     <a href="{% url 'produto:produto_list' %}">
-        <button type="button" class="btn btn-danger">
+        <button type="button" class="btn btn-info">
             <span class="fa fa-undo "></span> voltar
         </button>
+    </a>
+    <a href="{% url 'produto:produto_update' object.pk %}">
+            <button type="button" class="btn btn-warning">
+                <span class="fa fa-pencil "></span> Editar
+            </button>
     </a>
 </span>
 
@@ -47,12 +52,15 @@
 </div>
 <div>
     <span class="pull-right">
-        <a href="">
-            <button type="button" class="btn btn-warning">
-                <span class="fa fa-pencil"></span> Editar
+        <a href="{% url 'produto:produto_delete' object.pk %}">
+            <button type="button" class="btn btn-danger" title="Excluir"  onclick="return confirm('Tem certeza que deseja exluir?')">
+                <span class="fa fa-trash-o"></span> deletar
             </button>
         </a>
     </span>
 </div>
+
+
+
 
 {% endblock %}
