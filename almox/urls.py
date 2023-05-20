@@ -20,5 +20,6 @@ from django.urls import path, include
 urlpatterns = [
     path('', include('almox.base.urls')),
     path('produto/', include('almox.produto.urls')),
+    path('estoque/', include('almox.estoque.urls')),
     path('admin/', admin.site.urls),
 ]
