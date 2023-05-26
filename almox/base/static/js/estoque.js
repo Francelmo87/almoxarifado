@@ -1,5 +1,10 @@
 
-$(document).ready(function(){
+    $(document).ready(function(){
+        // Insere uma classe no primeiro item de produto
+        $('#id_estoque-0-produto').addClass('clProduto');
+        $('#id_estoque-0-quantidade').addClass('clQuantidade');
+    });
+
     $('#add-item').click(function(ev){
         ev.preventDefault();
         var count = $('#estoque').children().length;
@@ -15,7 +20,40 @@ $(document).ready(function(){
           scrollTop: $("#add-item").position().top - 200
         }, 800);
 
+        // insere as classes aos demais itens de produto
+        $('#id_estoque-' + (count) + '-produto').addClass('clProduto');
+        $('#id_estoque-' + (count) + '-quantidade').addClass('clQuantidade');
+     });
+
+    let estoque
+    let saldo
+    let campo
+    let quantidade
+
+    $(document).on('change', '.clProduto', function(){
+        let self = $(this)
+        let pk = $(this).val()
+        let url = '/produto/' + pk + '/json/'
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(response){
+                estoque = response.data[0].estoque
+                campo = self.attr('id').replace('produto', 'quantidade')
+                //Remove o valor do campo 'quantidade'
+                $('#'+campo).val('')
+            },
+            error: function(xhr){
+                //body
+            }
+        })
     });
-});
 
-
+   $(document).on('change', '.clQuantidade', function() {
+      quantidade = $(this).val();
+      campo = $(this).attr('id').replace('quantidade', 'saldo')
+      saldo = Number(quantidade) + Number(estoque);
+      // Atribui o saldo ao campo 'saldo
+      $('#'+campo).val(saldo)
+   });
