@@ -27,7 +27,6 @@
           <div id="estoque" class="form_inline mb-2 mr-sm-2">
             {{ formset }}
           </div>
-
     </div>
 
 
@@ -38,18 +37,21 @@
              </button>
         </a>
     </span>
-    <span class="pull-right">
-         <a href="">
-             <button type="submit" class="btn btn-primary" value="Save" style="margin-top:10px;">
-                <span class="fa fa-floppy-o"></span> Save
-             </button>
-         </a>
-        <a href="{% url 'estoque:estoque_entrada_list' %}">
-             <button type="submit" class="btn btn-danger" style="margin-top:10px;">
-                <span class="fa fa-times"></span> Cancelar
-             </button>
-         </a>
-    </span>
+
+    <div class="row float-right">
+      <div class="col-sm-12" style="margin-top: 10px;">
+        <div class="form-group-inline buttons">
+          <button class="btn btn-primary" value="Save">
+            <i class="fa fa-floppy-o"></i>
+            Salvar
+          </button>
+          <a href="{% url 'estoque:estoque_entrada_list' %}" class="btn btn-danger">
+            <i class="fa fa-times"></i>
+            Cancelar
+          </a>
+        </div>
+      </div>
+    </div>
 </form>
 
 {% endblock %}
