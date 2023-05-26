@@ -5,6 +5,8 @@ from django.urls import reverse_lazy
 from almox.base.models import TimeStampedModel
 from almox.produto.models import Produto
 
+from .managers import EstoqueEntradaManager, EstoqueSaidaManager
+
 # Create your models here.
 
 MOVIMENTO = (
@@ -29,6 +31,26 @@ class Estoque(TimeStampedModel):
 
     def nf_formated(self):
         return str(self.nf).zfill(3)
+
+
+class EstoqueEntrada(Estoque):
+    # Herda do manager
+    objects = EstoqueEntradaManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'estoque entrada'
+        verbose_name_plural = 'estoque entrada'
+
+
+class EstoqueSaida(Estoque):
+    # Herda do manager
+    objects = EstoqueSaidaManager()
+
+    class Meta:
+        proxy = True
+        verbose_name = 'estoque saída'
+        verbose_name_plural = 'estoque saída'
 
 
 class EstoqueItens(models.Model):
