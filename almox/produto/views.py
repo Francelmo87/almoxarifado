@@ -1,9 +1,10 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
 from .form import ProdutoForm
 from .models import Produto
+
 
 
 # Create your views here.
@@ -48,3 +49,10 @@ def produto_detail(request, pk):
     obj = Produto.objects.get(pk=pk)
     context = {'object': obj}
     return render(request, template_name, context)
+
+
+def produto_json(request, pk):
+    # Retorna o produto, id e estoque.
+    produto = Produto.objects.filter(pk=pk)
+    data = [item.to_dict_json() for item in produto]
+    return JsonResponse({'data': data})
