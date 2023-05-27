@@ -36,11 +36,10 @@ def dar_baixa_estoque(form):
     print('Estoque Atualizado com sucesso.')
 
 
-def estoque_entrada_add(request):
-    template_name = 'estoque_entrada_form.html'
+def estoque_add(request, template_name, movimento, url):
     estoque_form = Estoque()
     item_estoque_formset = inlineformset_factory(
-        EstoqueEntrada,
+        Estoque,
         EstoqueItens,
         form=EstoqueItensForm,
         extra=0,
@@ -52,20 +51,30 @@ def estoque_entrada_add(request):
         formset = item_estoque_formset(request.POST, instance=estoque_form, prefix='estoque')
         # Validação dos formulários
         if form.is_valid() and formset.is_valid():
-            form = form.save()
-            # coloca o "e" de entrada no formulário automaticamente e salva
-            form.movimento = 'e'
+            form = form.save(commit=False)
+            # Acrecenta ao campo de entrada e saida automaticamento de acordo com a escolha 'e' e 's'
+            form.movimento = movimento
+            # Salva o fomulario de cima chamado form
             form.save()
             # Salva o fomulario de baixo chamado formset
             formset.save()
             # atualização dos saldos de estoque ao dar entrada e saidas
             dar_baixa_estoque(form)
-            url = 'estoque:estoque_entrada_detail'
-            return HttpResponseRedirect(resolve_url(url, form.pk))
+            return {'pk': form.pk}
     else:
         form = EstoqueForm(instance=estoque_form, prefix='main')
         formset = item_estoque_formset(instance=estoque_form, prefix='estoque')
     context = {'form': form, 'formset': formset}
+    return context
+
+
+def estoque_entrada_add(request):
+    template_name = 'estoque_entrada_form.html'
+    movimento = 'e'
+    url = 'estoque:estoque_entrada_detail'
+    context = estoque_add(request, template_name, movimento, url)
+    if context.get('pk'):
+        return HttpResponseRedirect(resolve_url(url, context.get('pk')))
     return render(request, template_name, context)
 
 
@@ -85,32 +94,9 @@ def estoque_saida_detail(request, pk):
 
 def estoque_saida_add(request):
     template_name = 'estoque_saida_form.html'
-    estoque_form = Estoque()
-    item_estoque_formset = inlineformset_factory(
-        EstoqueSaida,
-        EstoqueItens,
-        form=EstoqueItensForm,
-        extra=0,
-        min_num=1,
-        validate_min=True,
-    )
-    if request.method == 'POST':
-        form = EstoqueForm(request.POST, instance=estoque_form, prefix='main')
-        formset = item_estoque_formset(request.POST, instance=estoque_form, prefix='estoque')
-        # Validação dos formulários
-        if form.is_valid() and formset.is_valid():
-            form = form.save()
-            # coloca o "s" de saida no formulário automaticamente e salva
-            form.movimento = 's'
-            form.save()
-            # Salva o fomulario de baixo chamado formset
-            formset.save()
-            # atualização dos saldos de estoque ao dar saida
-            dar_baixa_estoque(form)
-            url = 'estoque:estoque_saida_detail'
-            return HttpResponseRedirect(resolve_url(url, form.pk))
-    else:
-        form = EstoqueForm(instance=estoque_form, prefix='main')
-        formset = item_estoque_formset(instance=estoque_form, prefix='estoque')
-    context = {'form': form, 'formset': formset}
+    movimento = 's'
+    url = 'estoque:estoque_saida_detail'
+    context = estoque_add(request, template_name, movimento, url)
+    if context.get('pk'):
+        return HttpResponseRedirect(resolve_url(url, context.get('pk')))
     return render(request, template_name, context)
