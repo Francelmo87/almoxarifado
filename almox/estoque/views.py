@@ -79,6 +79,8 @@ def estoque_add(request, template_name, movimento, url):
         # Validação dos formulários
         if form.is_valid() and formset.is_valid():
             form = form.save(commit=False)
+            # Insere no formulario o usuário logado
+            form.funcionario = request.user
             # Acrecenta ao campo de entrada e saida automaticamento de acordo com a escolha 'e' e 's'
             form.movimento = movimento
             # Salva o fomulario de cima chamado form
