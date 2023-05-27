@@ -44,7 +44,7 @@ def estoque_saida_detail(request, pk):
     template_name = 'estoque_detail.html'
     obj = EstoqueSaida.objects.get(pk=pk)
     context = {'object': obj,
-               'url_list': 'estoque:estoque_entrada_list'
+               'url_list': 'estoque:estoque_saida_list'
                }
     return render(request, template_name, context)
 
@@ -71,6 +71,7 @@ def estoque_add(request, template_name, movimento, url):
         validate_min=True,
     )
     if request.method == 'POST':
+        # Herança do estoque form
         form = EstoqueForm(request.POST, instance=estoque_form, prefix='main')
         formset = item_estoque_formset(request.POST, instance=estoque_form, prefix='estoque')
         # Validação dos formulários
@@ -86,6 +87,7 @@ def estoque_add(request, template_name, movimento, url):
             dar_baixa_estoque(form)
             return {'pk': form.pk}
     else:
+        # Herança do estoque form
         form = EstoqueForm(instance=estoque_form, prefix='main')
         formset = item_estoque_formset(instance=estoque_form, prefix='estoque')
     context = {'form': form, 'formset': formset}
@@ -96,6 +98,7 @@ def estoque_entrada_add(request):
     template_name = 'estoque_entrada_form.html'
     movimento = 'e'
     url = 'estoque:estoque_entrada_detail'
+    # Herança da função estoque_add
     context = estoque_add(request, template_name, movimento, url)
     if context.get('pk'):
         return HttpResponseRedirect(resolve_url(url, context.get('pk')))
@@ -106,6 +109,7 @@ def estoque_saida_add(request):
     template_name = 'estoque_saida_form.html'
     movimento = 's'
     url = 'estoque:estoque_saida_detail'
+    # Herança da função estoque_add
     context = estoque_add(request, template_name, movimento, url)
     if context.get('pk'):
         return HttpResponseRedirect(resolve_url(url, context.get('pk')))
