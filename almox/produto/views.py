@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -15,6 +16,7 @@ def produto_list(request):
     return render(request, template_name, context)
 
 
+@login_required
 def produto_add(request):
     form = ProdutoForm(request.POST or None)
     template_name = 'produto_form.html'
@@ -26,6 +28,7 @@ def produto_add(request):
     return render(request, template_name, context)
 
 
+@login_required
 def produto_update(request, pk):
     template_name = 'produto_update.html'
     obj = Produto.objects.get(pk=pk)
@@ -38,6 +41,7 @@ def produto_update(request, pk):
     return render(request, template_name, context)
 
 
+@login_required
 def produto_delete(request, pk):
     obj = Produto.objects.get(pk=pk)
     obj.delete()
