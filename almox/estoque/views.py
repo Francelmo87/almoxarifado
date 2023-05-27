@@ -50,8 +50,13 @@ def estoque_entrada_add(request):
     if request.method == 'POST':
         form = EstoqueForm(request.POST, instance=estoque_form, prefix='main')
         formset = item_estoque_formset(request.POST, instance=estoque_form, prefix='estoque')
+        # Validação dos formulários
         if form.is_valid() and formset.is_valid():
             form = form.save()
+            # coloca o "e" de entrada no formulário automaticamente e salva
+            form.movimento = 'e'
+            form.save()
+            # Salva o fomulario de baixo chamado formset
             formset.save()
             # atualização dos saldos de estoque ao dar entrada e saidas
             dar_baixa_estoque(form)
@@ -92,8 +97,13 @@ def estoque_saida_add(request):
     if request.method == 'POST':
         form = EstoqueForm(request.POST, instance=estoque_form, prefix='main')
         formset = item_estoque_formset(request.POST, instance=estoque_form, prefix='estoque')
+        # Validação dos formulários
         if form.is_valid() and formset.is_valid():
             form = form.save()
+            # coloca o "s" de saida no formulário automaticamente e salva
+            form.movimento = 's'
+            form.save()
+            # Salva o fomulario de baixo chamado formset
             formset.save()
             # atualização dos saldos de estoque ao dar saida
             dar_baixa_estoque(form)
