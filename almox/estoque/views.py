@@ -12,15 +12,29 @@ from almox.produto.models import Produto
 
 
 def estoque_entrada_list(request):
-    template_name = 'estoque_entrada_list.html'
+    template_name = 'estoque_list.html'
     objects = EstoqueEntrada.objects.all()
-    context = {'object_list': objects}
+    context = {'object_list': objects, 'titulo': 'Entrada', 'url_add': 'estoque:estoque_entrada_add'}
+    return render(request, template_name, context)
+
+
+def estoque_saida_list(request):
+    template_name = 'estoque_list.html'
+    objects = EstoqueSaida.objects.all()
+    context = {'object_list': objects, 'titulo': 'Saida', 'url_add': 'estoque:estoque_saida_add'}
     return render(request, template_name, context)
 
 
 def estoque_entrada_detail(request, pk):
     template_name = 'estoque_entrada_detail.html'
     obj = EstoqueEntrada.objects.get(pk=pk)
+    context = {'object': obj}
+    return render(request, template_name, context)
+
+
+def estoque_saida_detail(request, pk):
+    template_name = 'estoque_saida_detail.html'
+    obj = EstoqueSaida.objects.get(pk=pk)
     context = {'object': obj}
     return render(request, template_name, context)
 
@@ -78,20 +92,6 @@ def estoque_entrada_add(request):
     return render(request, template_name, context)
 
 
-def estoque_saida_list(request):
-    template_name = 'estoque_saida_list.html'
-    objects = EstoqueSaida.objects.all()
-    context = {'object_list': objects}
-    return render(request, template_name, context)
-
-
-def estoque_saida_detail(request, pk):
-    template_name = 'estoque_saida_detail.html'
-    obj = EstoqueSaida.objects.get(pk=pk)
-    context = {'object': obj}
-    return render(request, template_name, context)
-
-
 def estoque_saida_add(request):
     template_name = 'estoque_saida_form.html'
     movimento = 's'
@@ -100,3 +100,8 @@ def estoque_saida_add(request):
     if context.get('pk'):
         return HttpResponseRedirect(resolve_url(url, context.get('pk')))
     return render(request, template_name, context)
+
+
+
+
+
