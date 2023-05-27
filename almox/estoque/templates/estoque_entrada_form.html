@@ -58,12 +58,13 @@
 
 
 {% block js %}
+    <script src="{% static 'js/estoque_entrada.js' %}"></script>
 
-  <script type="text/html" id="item-estoque">
-    <div id="item-__prefix__" class="form-group">
-        {{ formset.empty_form }}
-    </div>
-  </script>
+    <script type="text/html" id="item-estoque">
+        <div id="item-__prefix__" class="form-group">
+            {{ formset.empty_form }}
+        </div>
+    </script>
 
 
 {% endblock js %}
