@@ -3,7 +3,7 @@ from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, resolve_url
 
-from .forms import EstoqueItensForm, EstoqueForm
+from .forms import EstoqueForm, EstoqueItensEntradaForm, EstoqueItensSaidaForm
 from .models import Estoque, EstoqueItens, EstoqueSaida, EstoqueEntrada
 
 from almox.produto.models import Produto
@@ -62,13 +62,19 @@ def dar_baixa_estoque(form):
 
 
 @login_required
-def estoque_add(request, template_name, movimento, url):
+def estoque_add(request, form_inline, template_name, movimento, url):
     estoque_form = Estoque()
     item_estoque_formset = inlineformset_factory(
+        # Herança das classes 'model.py'
         Estoque,
         EstoqueItens,
-        form=EstoqueItensForm,
+        # Herança do formulário
+        form=form_inline,
+        # insere a quantidade inicial de formulário de itens
         extra=0,
+        # Rerira o check de deletar
+        can_delete=False,
+        # Quantidade que mostra iniciamente
         min_num=1,
         validate_min=True,
     )
@@ -100,11 +106,12 @@ def estoque_add(request, template_name, movimento, url):
 
 @login_required
 def estoque_entrada_add(request):
+    form_inline = EstoqueItensEntradaForm
     template_name = 'estoque_entrada_form.html'
     movimento = 'e'
     url = 'estoque:estoque_entrada_detail'
     # Herança da função estoque_add
-    context = estoque_add(request, template_name, movimento, url)
+    context = estoque_add(request, form_inline, template_name, movimento, url)
     if context.get('pk'):
         return HttpResponseRedirect(resolve_url(url, context.get('pk')))
     return render(request, template_name, context)
@@ -112,16 +119,12 @@ def estoque_entrada_add(request):
 
 @login_required
 def estoque_saida_add(request):
+    form_inline = EstoqueItensSaidaForm
     template_name = 'estoque_saida_form.html'
     movimento = 's'
     url = 'estoque:estoque_saida_detail'
     # Herança da função estoque_add
-    context = estoque_add(request, template_name, movimento, url)
+    context = estoque_add(request, form_inline,  template_name, movimento, url)
     if context.get('pk'):
         return HttpResponseRedirect(resolve_url(url, context.get('pk')))
     return render(request, template_name, context)
-
-
-
-
-
