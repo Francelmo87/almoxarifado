@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -7,11 +8,22 @@ from .form import ProdutoForm
 from .models import Produto
 
 
-
 # Create your views here.
+
+
 def produto_list(request):
     template_name = 'produto_list.html'
+    # Busca todos os produtos da banco de dados 'Produto'
     objects = Produto.objects.all()
+    # campo de busca da página
+    search = request.GET.get('search')
+    if search:
+        objects = objects.filter(produto__icontains=search)
+    # Paginação
+    paginator = Paginator(objects, 10)
+    page_number = request.GET.get('page')
+    objects = paginator.get_page(page_number)
+
     context = {'object_list': objects}
     return render(request, template_name, context)
 
